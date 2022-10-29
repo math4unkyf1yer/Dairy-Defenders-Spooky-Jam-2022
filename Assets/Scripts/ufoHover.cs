@@ -7,12 +7,15 @@ using UnityEngine;
 public class ufoHover : MonoBehaviour
 {
     public float hoverheight = 0;
+    float speed;
     public float hoverSpeed;
+    public float huntSpeed;
     public Transform[] patrolPoints;
     public int targPoint = 0;
     public Animator aiState;
     public Animator camState;
-
+    public Transform player;
+    public Vector3 lastKnownPlayerPos;
     Vector3 playerPos;
     // Start is called before the first frame update
     void Start()
@@ -29,6 +32,7 @@ public class ufoHover : MonoBehaviour
         //patrol State
         if (aiState.GetCurrentAnimatorStateInfo(0).IsName("Patrol"))
         {
+            speed = hoverSpeed;
             checkPatrol();
              hoverX = patrolPoints[targPoint].position.x;
              hoverY = hoverheight;
@@ -37,18 +41,34 @@ public class ufoHover : MonoBehaviour
 
         //aggro State
         if (aiState.GetCurrentAnimatorStateInfo(0).IsName("aggro"))
-        { 
+        {
+            speed = huntSpeed;
+            hoverX = player.position.x;
+            hoverY = hoverheight;
+            hoverZ = player.position.z;
 
         }
 
-            //kill State
-            if (aiState.GetCurrentAnimatorStateInfo(0).IsName("BeamPlayer"))
+        //search State
+        if (aiState.GetCurrentAnimatorStateInfo(0).IsName("search"))
+        {
+            speed = hoverSpeed;
+            hoverX = lastKnownPlayerPos.x;
+            hoverY = hoverheight;
+            hoverZ = lastKnownPlayerPos.z;
+            if(new Vector3(transform.position.x,hoverheight,transform.position.z) == new Vector3(lastKnownPlayerPos.x, hoverheight, lastKnownPlayerPos.z))
+            {
+                aiState.SetTrigger("searched");
+            }
+        }
+        //kill State
+        if (aiState.GetCurrentAnimatorStateInfo(0).IsName("BeamPlayer"))
         {
             hoverX = playerPos.x;
             hoverY = hoverheight;
             hoverZ = playerPos.z;
         }
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(hoverX,hoverY,hoverZ), hoverSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, new Vector3(hoverX,hoverY,hoverZ), speed * Time.deltaTime);
     }
     void checkPatrol()
     {
