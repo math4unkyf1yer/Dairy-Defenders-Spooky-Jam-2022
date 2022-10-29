@@ -16,6 +16,8 @@ public class ufoHover : MonoBehaviour
     public Animator camState;
     public Transform player;
     public Vector3 lastKnownPlayerPos;
+    Vector3 movePos;
+
     Vector3 playerPos;
     // Start is called before the first frame update
     void Start()
@@ -68,8 +70,31 @@ public class ufoHover : MonoBehaviour
             hoverY = hoverheight;
             hoverZ = playerPos.z;
         }
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(hoverX,hoverY,hoverZ), speed * Time.deltaTime);
+
+
+         movePos = new Vector3(hoverX, hoverY, hoverZ);
+
+        CheckCourse();
+
+        transform.position = Vector3.MoveTowards(transform.position,movePos, speed * Time.deltaTime);
     }
+
+    void CheckCourse()
+    {
+        RaycastHit hit;
+        Vector3 dir = (transform.position - movePos).normalized;
+
+        if (Physics.Raycast(transform.position, -dir, out hit, Mathf.Infinity) && hit.transform.gameObject.tag == "Map")
+        {
+            movePos = hit.point;
+            lastKnownPlayerPos = hit.point;
+        }
+    }
+
+    
+
+
+
     void checkPatrol()
     {
         if( transform.position == new Vector3(patrolPoints[targPoint].position.x, hoverheight, patrolPoints[targPoint].position.z))
