@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class player_Movement : MonoBehaviour
@@ -16,6 +17,10 @@ public class player_Movement : MonoBehaviour
     float turnSmoothVelocity;
     public float turnSmoothTime = 0.1f;
     public float speed;
+    public bool beamed = false;
+    public GameObject ufoAttacker;
+    public float beamSpeed = 5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +31,12 @@ public class player_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (beamed == true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, ufoAttacker.transform.position, beamSpeed * Time.deltaTime);
+
+            return;
+        }
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;

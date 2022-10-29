@@ -386,9 +386,11 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
-"Assets/gunAim.cs"
+"Assets/Scripts/Player/gunAim.cs"
 "Assets/Scripts/Player/player_Movement.cs"
-"Assets/ufoHover.cs"
+"Assets/Scripts/ufoHover.cs"
+"Assets/Scripts/Ufo_Beam.cs"
+"Assets/Ufo_Sight.cs"
 -langversion:9.0
 
 /deterministic
